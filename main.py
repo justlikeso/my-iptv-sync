@@ -1,55 +1,71 @@
 import requests
-import re
+import concurrent.futures
 
-# 1. 扩充更强力的源站（包含港台、国际频道）
+# 1. 强力源列表
 SOURCES = [
-    "https://raw.githubusercontent.com/Guovin/TV/gd/output/result.m3u",
+    "https://live.fanmingming.com/tv/m3u/ipv6.m3u",
     "https://raw.githubusercontent.com/YueChan/Live/main/IPTV.m3u",
-    "https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u",
-    "https://raw.githubusercontent.com/Meroser/IPTV/main/IPTV.m3u"
+    "https://raw.githubusercontent.com/YanG-1989/m3u/main/Gather.m3u",
+    "https://raw.githubusercontent.com/Guovin/TV/gd/output/result.m3u"
 ]
 
+# 2. 测速函数：检查链接是否真的能打开
+def check_url(channel_info, url):
+    try:
+        # 模拟浏览器访问，设置 3 秒超时，只读头部信息（快）
+        response = requests.head(url, timeout=3, allow_redirects=True)
+        if response.status_code == 200:
+            return (channel_info, url)
+    except:
+        pass
+    return None
+
 def get_favorites():
-    # 读取收藏夾并去掉空格
     with open("favorites.txt", "r", encoding="utf-8") as f:
         return [line.strip() for line in f if line.strip()]
 
 def fetch_and_filter():
     favs = get_favorites()
-    print(f"正在查找以下频道: {favs}")
+    raw_channels = []
     
-    output_lines = ["#EXTM3U"]
-    found_count = 0
-    
-    for url in SOURCES:
+    # 步骤 A: 抓取并初步筛选关键词
+    for source_url in SOURCES:
         try:
-            print(f"正在抓取源: {url}")
-            response = requests.get(url, timeout=15)
-            content = response.text.split('\n')
-            
-            for i in range(len(content)):
-                line = content[i]
-                if "#EXTINF" in line:
-                    # 检查这一行是否包含我们的关键词
+            print(f"正在抓取源: {source_url}")
+            res = requests.get(source_url, timeout=10)
+            lines = res.text.split('\n')
+            for i in range(len(lines)):
+                if "#EXTINF" in lines[i]:
                     for fav in favs:
-                        # 忽略大小写匹配
-                        if fav.lower() in line.lower():
-                            # 找到后，把信息行和紧接着的 URL 行都存入
-                            if i + 1 < len(content) and content[i+1].startswith("http"):
-                                output_lines.append(line)
-                                output_lines.append(content[i+1])
-                                found_count += 1
-                                break # 匹配到一个关键词就跳过，防止重复添加
-        except Exception as e:
-            print(f"连接失败 {url}: {e}")
+                        if fav.lower() in lines[i].lower():
+                            if i + 1 < len(lines) and lines[i+1].startswith("http"):
+                                raw_channels.append((lines[i], lines[i+1].strip()))
+                                break
+        except:
+            continue
 
-    # 保存结果
+    print(f"初步搜集到 {len(raw_channels)} 个备选频道，开始测速...")
+
+    # 步骤 B: 多线程并发测速（大幅缩短等待时间）
+    valid_list = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
+        futures = [executor.submit(check_url, info, url) for info, url in raw_channels]
+        for future in concurrent.futures.as_completed(futures):
+            result = future.result()
+            if result:
+                valid_list.append(result)
+
+    # 步骤 C: 写入文件
     with open("my_list.m3u", "w", encoding="utf-8") as f:
-        f.write("\n".join(output_lines))
+        f.write("#EXTM3U\n")
+        for info, url in valid_list:
+            f.write(f"{info}\n{url}\n")
     
-    print(f"任务完成！总共找到 {found_count} 个符合条件的频道。")
+    print(f" 筛选完毕！最终保留了 {len(valid_list)} 个有效频道。")
 
 if __name__ == "__main__":
     fetch_and_filter()
+  
+
   
   
