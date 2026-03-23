@@ -1,4 +1,5 @@
 name: Update IPTV List
+
 on:
   schedule:
     - cron: '0 21 * * *' # 每天北京时间凌晨 5 点运行
@@ -26,7 +27,9 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add my_list.m3u
-          git commit -m "Update list" || exit 0
+          # 告诉 GitHub 追踪这两个新生成的文件
+          git add ipv4_only.m3u integrated_list.m3u
+          git commit -m "Update IPTV lists (IPv4 & Mixed)" || exit 0
           git push
+  
 
