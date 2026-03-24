@@ -1,35 +1,31 @@
 #EXTM3U
-#EXTINF:-1,凤凰中文 (1080P)
+#EXTINF:-1,凤凰中文 HD
 http://117.148.179.136/hw-ott-n-test.miguvideo.com/PLTV/88888888/224/3221225829/index.m3u8
-#EXTINF:-1,凤凰资讯 (1080P)
+#EXTINF:-1,凤凰资讯 HD
 http://117.148.179.136/hw-ott-n-test.miguvideo.com/PLTV/88888888/224/3221225830/index.m3u8
-#EXTINF:-1 tvg-id="494" tvg-name="TVBS亚洲" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/TVBS亚洲.png" group-title="🌊港·澳·台",TVBS亚洲
-http://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index_5.m3u8?zshijd
-#EXTINF:-1 tvg-id="492" tvg-name="凤凰香港" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/凤凰香港.png" group-title="🌊港·澳·台",凤凰香港
-http://cdn6.163189.xyz/163189/fhhk
-#EXTINF:-1 tvg-id="491" tvg-name="凤凰资讯" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/凤凰资讯.png" group-title="🌊港·澳·台",凤凰资讯
-http://61.221.215.25:8800/hls/47/index.m3u8
-#EXTINF:-1 tvg-id="495" tvg-name="纬来体育" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/纬来体育.png" group-title="🏀体育频道",纬来体育
-https://epg.pw/stream/8855a9936e37e608a0ec8a014cce1673dee9c5d68d560da376cc92e5edef2b25.m3u8
-#EXTINF:-1 tvg-id="490" tvg-name="凤凰中文" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/凤凰中文.png" group-title="🌊港·澳·台",凤凰中文
-http://cdn6.163189.xyz/163189/fhzw
+#EXTINF:-1,HBO 高清
+http://103.233.254.164:2042/live/hbo.m3u8
+#EXTINF:-1,Discovery 探索
+http://103.233.254.164:2042/live/discovery.m3u8
+#EXTINF:-1,国家地理 HD
+http://103.233.254.164:2042/live/natgeo.m3u8
+#EXTINF:-1,纬来体育
+http://103.233.254.164:2042/live/vlsport.m3u8
+#EXTINF:-1,纬来电影
+http://103.233.254.164:2042/live/vmovie.m3u8
 #EXTINF:-1 tvg-id="494" tvg-name="TVBS亚洲" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/TVBS亚洲.png" group-title="🌊港·澳·台",TVBS亚洲
 http://38.64.72.148/hls/modn/list/4005/chunklist0.m3u8
-#EXTINF:-1 tvg-id="495" tvg-name="纬来体育" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/纬来体育.png" group-title="🌊港·澳·台",纬来体育
-https://epg.pw/stream/8855a9936e37e608a0ec8a014cce1673dee9c5d68d560da376cc92e5edef2b25.m3u8
-#EXTINF:-1 tvg-id="2" tvg-name="凤凰中文" tvg-logo="https://gcore.jsdelivr.net/gh/yuanzl77/TVlogo@master/png/凤凰中文.png" group-title="港·澳·台",凤凰中文
-http://php.jdshipin.com/TVOD/iptv.php?id=fhzw
+#EXTINF:-1 tvg-id="494" tvg-name="TVBS亚洲" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/TVBS亚洲.png" group-title="🌊港·澳·台",TVBS亚洲
+http://d2e1asnsl7br7b.cloudfront.net/7782e205e72f43aeb4a48ec97f66ebbe/index_5.m3u8?zshijd
+#EXTINF:-1 tvg-id="490" tvg-name="凤凰中文" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/凤凰中文.png" group-title="🌊港·澳·台",凤凰中文
+http://cdn6.163189.xyz/163189/fhzw
 #EXTINF:-1 tvg-id="491" tvg-name="凤凰资讯" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/凤凰资讯.png" group-title="🌊港·澳·台",凤凰资讯
-http://r.jdshipin.com/0Rp07
-#EXTINF:-1 tvg-id="12" tvg-name="翡翠台" tvg-logo="https://gcore.jsdelivr.net/gh/yuanzl77/TVlogo@master/png/翡翠台.png" group-title="港·澳·台",翡翠台
-http://php.jdshipin.com/TVOD/iptv.php?id=fct
+http://61.221.215.25:8800/hls/47/index.m3u8
 #EXTINF:-1 tvg-id="493" tvg-name="凤凰卫视" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/凤凰卫视.png" group-title="🌊港·澳·台",凤凰卫视
 http://php.jdshipin.com/TVOD/iptv.php?id=fhzw
-#EXTINF:-1 tvg-id="512" tvg-name="纬来电影" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/纬来电影.png" group-title="🎬电影频道",纬来电影
-https://stream1.freetv.fun/wei-lai-dian-ying-1.m3u8
-#EXTINF:-1 tvg-id="24" tvg-name="凤凰中文" tvg-logo="https://gcore.jsdelivr.net/gh/yuanzl77/TVlogo@master/png/凤凰中文.png" group-title="港·澳·台",凤凰中文
-https://stream1.freetv.fun/2b657a181daa345025199e7d6b8de95a1a87b19abceafbd16e2499a49da33c6f.m3u8
-#EXTINF:-1 tvg-id="21" tvg-name="凤凰中文" tvg-logo="https://gcore.jsdelivr.net/gh/yuanzl77/TVlogo@master/png/凤凰中文.png" group-title="港·澳·台",凤凰中文
-https://stream1.freetv.fun/fe3d3346f748e4ec230691be958aff27e91c225b43b5855685cd1fbe79c56f60.m3u8
-#EXTINF:-1 tvg-id="23" tvg-name="凤凰中文" tvg-logo="https://gcore.jsdelivr.net/gh/yuanzl77/TVlogo@master/png/凤凰中文.png" group-title="港·澳·台",凤凰中文
-https://stream1.freetv.fun/91dffd2dca60b65821a94747f2f3020dfc9642bb89f86ed7fa6d8b0b7487c5d2.m3u8
+#EXTINF:-1 tvg-id="492" tvg-name="凤凰香港" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/凤凰香港.png" group-title="🌊港·澳·台",凤凰香港
+http://r.jdshipin.com/yDoTN
+#EXTINF:-1 tvg-id="495" tvg-name="纬来体育" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/纬来体育.png" group-title="🏀体育频道",纬来体育
+https://epg.pw/stream/4f18dfe0593db5c686eb64ae8edaf2a9202d4d46bdc9bbde2cee27708e12ea01.m3u8
+#EXTINF:-1 tvg-id="495" tvg-name="纬来体育" tvg-logo="https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/纬来体育.png" group-title="🏀体育频道",纬来体育
+https://epg.pw/stream/ab6df63b64d0cc44a1f4f029ed847a26fa54a7aebd455578fb05a63f02c22f4b.m3u8
