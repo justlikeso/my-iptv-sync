@@ -1,24 +1,21 @@
 import requests
 import concurrent.futures
 
-# 1. 扩充源列表
+# 1. 广撒网：汇集全网最强的 20+ 个聚合源
 SOURCES = [
-    "https://raw.githubusercontent.com/vbskycn/iptv/master/tv.m3u",
-    "https://raw.githubusercontent.com/Guovin/TV/gd/output/result.m3u",
-    "https://raw.githubusercontent.com/FongMi/TV/main/itv/iptv.m3u",
     "https://raw.githubusercontent.com/yuanzl77/IPTV/main/live.m3u",
-    "https://raw.githubusercontent.com/Meroser/IPTV/main/IPTV.m3u"
-]
-
-# 2. 【核心改动】硬编码保底源 - 这些是目前大陆直连最稳的高清源
-MUST_HAVE = [
-    {"name": "凤凰中文 HD", "url": "http://117.148.179.136/hw-ott-n-test.miguvideo.com/PLTV/88888888/224/3221225829/index.m3u8"},
-    {"name": "凤凰资讯 HD", "url": "http://117.148.179.136/hw-ott-n-test.miguvideo.com/PLTV/88888888/224/3221225830/index.m3u8"},
-    {"name": "HBO 高清", "url": "http://103.233.254.164:2042/live/hbo.m3u8"},
-    {"name": "Discovery 探索", "url": "http://103.233.254.164:2042/live/discovery.m3u8"},
-    {"name": "国家地理 HD", "url": "http://103.233.254.164:2042/live/natgeo.m3u8"},
-    {"name": "纬来体育", "url": "http://103.233.254.164:2042/live/vlsport.m3u8"},
-    {"name": "纬来电影", "url": "http://103.233.254.164:2042/live/vmovie.m3u8"}
+    "https://raw.githubusercontent.com/ssili126/tv/main/itvlist.m3u",
+    "https://raw.githubusercontent.com/Guovin/TV/gd/output/result.m3u",
+    "https://raw.githubusercontent.com/FanMingming/live/main/tv/m3u/ipv6.m3u",
+    "https://raw.githubusercontent.com/YanG-1989/m3u/main/Gather.m3u",
+    "https://raw.githubusercontent.com/vbskycn/iptv/master/tv.m3u",
+    "https://raw.githubusercontent.com/Meroser/IPTV/main/IPTV.m3u",
+    "https://raw.githubusercontent.com/YueChan/Live/main/IPTV.m3u",
+    "https://raw.githubusercontent.com/FongMi/TV/main/itv/iptv.m3u",
+    "https://raw.githubusercontent.com/suppress-on/IPTV/main/live.m3u",
+    "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/cn.m3u",
+    "https://raw.githubusercontent.com/K-S-V/IPTV/master/IPTV.m3u",
+    "https://raw.githubusercontent.com/Memory-of-Life/IPTV/main/Live.m3u"
 ]
 
 def clean_url(url):
@@ -28,70 +25,68 @@ def check_url(info, url):
     url = clean_url(url)
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'}
     try:
-        with requests.get(url, timeout=3, stream=True, headers=headers) as r:
-            if r.status_code == 200:
-                return {"info": info, "url": url}
+        # 为了提高效率，这里只做基础连接测试，因为有的台在境外，深度测试太慢
+        response = requests.head(url, timeout=2, headers=headers, allow_redirects=True)
+        if response.status_code == 200:
+            return {"info": info, "url": url}
     except:
         pass
     return None
 
 def fetch_and_process():
-    # 关键词匹配
+    # 增加更多关键词，特别是针对日本台和纪录片
     keyword_map = {
         "凤凰": ["凤凰", "Phoenix"],
         "HBO": ["HBO"],
-        "Discovery": ["Discovery", "探索"],
+        "Discovery": ["Discovery", "探索", "探險"],
         "国家地理": ["National", "地理", "Nat Geo"],
         "纬来": ["纬来", "Videoland"],
-        "国兴": ["国兴"],
+        "国兴": ["国兴", "Kokusai"],
         "翡翠": ["翡翠", "TVB"],
-        "NHK": ["NHK"]
+        "NHK": ["NHK", "日本"],
+        "动物": ["Animal", "动物星球"],
+        "历史": ["History", "历史频道"]
     }
 
-    try:
-        with open("favorites.txt", "r", encoding="utf-8") as f:
-            user_keys = [l.strip() for l in f if l.strip()]
-    except:
-        user_keys = list(keyword_map.keys())
-
-    # 结果去重字典
     results = {}
-
-    # A. 先加载保底必看台
-    for item in MUST_HAVE:
-        results[item['name']] = {"info": f"#EXTINF:-1,{item['name']}", "url": item['url']}
-
-    # B. 抓取网络源并补充
     raw_candidates = []
+
+    print("正在从全网 20+ 个源搜集频道，这可能需要一点时间...")
+
     for s_url in SOURCES:
         try:
-            r = requests.get(s_url, timeout=10)
+            r = requests.get(s_url, timeout=15)
             lines = r.text.split('\n')
             for i in range(len(lines)):
                 if "#EXTINF" in lines[i]:
-                    for k in user_keys:
-                        matches = keyword_map.get(k, [k])
-                        if any(m.lower() in lines[i].lower() for m in matches):
+                    name_line = lines[i]
+                    for k, aliases in keyword_map.items():
+                        if any(a.lower() in name_line.lower() for a in aliases):
                             if i + 1 < len(lines) and lines[i+1].startswith("http"):
-                                raw_candidates.append((lines[i], lines[i+1].strip(), k))
+                                raw_candidates.append((name_line, lines[i+1].strip(), k))
                                 break
         except: continue
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
+    print(f"搜集到 {len(raw_candidates)} 个候选链接，开始多线程筛选...")
+
+    # 提高线程到 100，疯狂筛选
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
         futures = [executor.submit(check_url, info, url) for info, url, k in raw_candidates]
         for i, f in enumerate(concurrent.futures.as_completed(futures)):
             res = f.result()
             if res:
                 k_name = raw_candidates[i][2]
-                # 每个关键词下再增加 2 个不同线路，避免重复
-                unique_key = f"{k_name}_{i}" 
-                if len([x for x in results if k_name in x]) < 4: 
-                    results[unique_key] = res
+                # 每个频道保留最多 15 个链接，总有一个能播！
+                if k_name not in results: results[k_name] = []
+                if len(results[k_name]) < 15:
+                    results[k_name].append(res)
 
-    # C. 生成 M3U (加入 PotPlayer 兼容前缀)
+    # 写入文件
     content = "#EXTM3U\n"
-    for item in results.values():
-        content += f"{item['info']}\n{item['url']}\n"
+    for k in keyword_map.keys():
+        if k in results:
+            for item in results[k]:
+                content += f"{item['info']}\n{item['url']}\n"
 
     with open("ipv4_only.m3u", "w", encoding="utf-8") as f:
         f.write(content)
@@ -100,6 +95,8 @@ def fetch_and_process():
 
 if __name__ == "__main__":
     fetch_and_process()
+  
+
 
 
 
