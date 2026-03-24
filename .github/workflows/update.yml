@@ -1,35 +1,27 @@
 name: Update IPTV List
-
 on:
   schedule:
-    - cron: '0 21 * * *' # 每天北京时间凌晨 5 点运行
-  workflow_dispatch:      # 允许手动点击运行
-
+    - cron: '0 21 * * *'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-
       - name: Install dependencies
         run: pip install requests
-
       - name: Run script
         run: python main.py
-
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # 告诉 GitHub 追踪这两个新生成的文件
           git add ipv4_only.m3u integrated_list.m3u
-          git commit -m "Update IPTV lists (IPv4 & Mixed)" || exit 0
+          git commit -m "Update lists" || exit 0
           git push
   
-
